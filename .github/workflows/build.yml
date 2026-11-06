@@ -1,0 +1,53 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: NDEF encoder/decoder tests
+        run: test/run.sh
+
+  firmware:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: arduino/setup-arduino-cli@v2
+
+      - name: Install ESP32 core 3.3.12
+        run: |
+          arduino-cli core update-index --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core install esp32:esp32@3.3.12 --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+
+      - name: Install LilyGoLib + LilyGoLib-ThirdParty
+        run: |
+          LIB="$HOME/Arduino/libraries"
+          mkdir -p "$LIB"
+          git clone --depth 1 https://github.com/Xinyuan-LilyGO/LilyGoLib.git "$LIB/LilyGoLib"
+          git clone --depth 1 https://github.com/Xinyuan-LilyGO/LilyGoLib-ThirdParty.git /tmp/thirdparty
+          cp -r /tmp/thirdparty/* "$LIB/"
+          rm -f "$LIB/README.md"
+
+      - name: Compile for T-Watch Ultra
+        run: arduino-cli compile -b esp32:esp32:twatch_ultra --export-binaries NFC_Toolkit
+
+      - name: Merge flashable image
+        run: |
+          B=$(ls -d NFC_Toolkit/build/*/)
+          ESPTOOL=$(find "$HOME/.arduino15/packages/esp32/tools/esptool_py" -name 'esptool' -type f | head -1)
+          "$ESPTOOL" --chip esp32s3 merge-bin -o NFC_Toolkit_TWatchUltra_0x0.bin \
+            --flash-mode dio --flash-freq 80m --flash-size 16MB \
+            0x0 "$B/NFC_Toolkit.ino.bootloader.bin" 0x8000 "$B/NFC_Toolkit.ino.partitions.bin" \
+            0xe000 "$B/boot_app0.bin" 0x10000 "$B/NFC_Toolkit.ino.bin"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NFC_Toolkit_TWatchUltra-firmware
+          path: NFC_Toolkit_TWatchUltra_0x0.bin
