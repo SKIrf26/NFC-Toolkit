@@ -94,8 +94,9 @@ s += [cover, Spacer(1, 16)]
 s.append(P("The T-Watch Ultra contains an ST25R3916, the same NFC front-end STMicroelectronics uses in its "
            "development kits. It can read and write tags, act as a tag itself, sense other NFC readers and "
            "measure its own antenna. NFC Toolkit puts all of that on eight tiles on the watch face."))
-s.append(P("Screenshots in this guide come from a desktop simulator running the app's real interface code "
-           "with sample tag data. They show the exact layout you'll see on the watch.", small))
+s.append(P("The app runs on the T-Watch Ultra. For sharp, glare-free pictures, the screenshots in this guide "
+           "were captured from a desktop simulator running the app's real interface code at the watch's exact "
+           "410×502 resolution, with sample tag data. They match the layout on the watch.", small))
 s.append(PageBreak())
 
 # ------------------------------------------------------------------ contents at a glance

@@ -5,7 +5,9 @@ A complete NFC app for the **LilyGO T-Watch Ultra** (ESP32-S3 + **ST25R3916**): 
 ![NFC Toolkit screens](docs/banner.png)
 
 [![Build](https://github.com/SKIrf26/NFC-Toolkit/actions/workflows/build.yml/badge.svg)](https://github.com/SKIrf26/NFC-Toolkit/actions/workflows/build.yml)
-&nbsp;**[User guide (PDF)](docs/NFC_Toolkit_User_Guide.pdf)** · **[Flash the firmware](#install)** · **[What it can read](#supported-tags)**
+&nbsp;**Status: running on real T-Watch Ultra hardware.**
+
+**[User guide (PDF)](docs/NFC_Toolkit_User_Guide.pdf)** · **[Flash the firmware](#install)** · **[What it can read](#supported-tags)**
 
 ---
 
@@ -22,7 +24,7 @@ A complete NFC app for the **LilyGO T-Watch Ultra** (ESP32-S3 + **ST25R3916**): 
 | ⚙️ | **RF Lab** | Chip ID/revision, 5 supply rails, antenna amplitude & phase with live chart, capacitive sensor, and a detune meter that "sees" tags approaching. |
 | 🗂 | **History** | Timestamped log of everything scanned or dumped, on microSD (or internal flash). |
 
-The interface is laid out inside the Ultra's rounded-corner AMOLED (410×502) safe area, with haptic feedback on every event. The NFC field is switched off whenever you leave a tool.
+The app runs on the T-Watch Ultra itself. The interface is laid out inside the watch's rounded-corner AMOLED (410×502) safe area, with haptic feedback on every event. The NFC field is switched off whenever you leave a tool.
 
 <p align="center">
   <img src="docs/screenshots/03_scan_result.png" width="200" alt="Scan result">
@@ -116,7 +118,7 @@ Only one NFC mode runs at a time. Starting a tool stops the previous one, and le
 | Path | What it is |
 |---|---|
 | `test/run.sh` | Host unit tests for the NDEF encoder/decoder (`g++` only). |
-| `tools/simulator/build_and_run.sh` | Desktop simulator: compiles the **real** `ui.cpp` with LVGL for your PC, hardware stubbed, renders every screen at 410×502, checks nothing falls into the rounded corners, and refreshes `docs/screenshots/`. |
+| `tools/simulator/build_and_run.sh` | Desktop simulator (the README and PDF screenshots come from it, at the watch's exact 410×502 resolution): compiles the **real** `ui.cpp` with LVGL for your PC, hardware stubbed, renders every screen at 410×502, checks nothing falls into the rounded corners, and refreshes `docs/screenshots/`. |
 | `tools/guide/make_guide.py` | Regenerates the PDF user guide from the screenshots (`pip install reportlab`). |
 | `.github/workflows/build.yml` | CI: unit tests + full firmware build for `esp32:esp32:twatch_ultra`, firmware uploaded as an artifact. |
 
@@ -127,7 +129,7 @@ Only one NFC mode runs at a time. Starting a tool stops the previous one, and le
 - **No permanent lock / read-only.** It's left out on purpose because it's irreversible.
 - **Type 4 emulation** is marked experimental in LilyGoLib. If a phone won't read it, try *Mixed* or *Type 3*.
 - **Payment cards**: only the public application directory (app names/AIDs) is read. Card numbers and transactions are never requested.
-- The screen layout has been verified in the simulator. Hardware reports and photos are welcome via Issues.
+- Reports on specific tag types, and photos of it in use, are welcome via Issues.
 
 Please only read, write or copy tags and cards that you own or have permission to use.
 
