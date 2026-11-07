@@ -1,0 +1,1 @@
+namespace fs { class FS {}; }

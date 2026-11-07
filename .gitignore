@@ -1,0 +1,14 @@
+# Arduino / PlatformIO build output
+NFC_Toolkit/build/
+.pio/
+*.elf
+*.map
+
+# Simulator intermediates
+tools/simulator/build/
+tools/simulator/shots/
+tools/simulator/png/
+tools/simulator/nfc_types.inc
+
+.DS_Store
+__pycache__/
